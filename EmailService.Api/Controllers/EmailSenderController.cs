@@ -10,12 +10,28 @@ namespace EmailService.Api.Controllers
     [ApiController]
     public class EmailSenderController : ControllerBase
     {
+        private readonly ILogger<EmailSenderController> _logger;
+        private readonly IEmailService _emailService;
+
+        public EmailSenderController(IEmailService emailService,ILogger<EmailSenderController> logger)
+        {
+            _emailService = emailService;
+            _logger = logger;
+        }
+
         // POST api/<EmailSenderController>
         [HttpPost("send")]
-        public void Post([FromBody] EmailServiceMessage message)
+        public async Task PostAsync([FromBody] EmailServiceMessage message)
         {
-            var _email = new EmailService();
-            _email.SendEmailAsync(message).GetAwaiter();
+            try
+            {
+                await _emailService.SendEmailAsync(message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка в Post");
+                throw;
+            }
         }
 
     }
