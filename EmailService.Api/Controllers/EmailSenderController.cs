@@ -11,7 +11,7 @@ namespace EmailService.Api.Controllers
     public class EmailSenderController : ControllerBase
     {
         // POST api/<EmailSenderController>
-        [HttpPost]
+        [HttpPost("send")]
         public void Post([FromBody] EmailServiceMessage message)
         {
             var _email = new EmailService();
