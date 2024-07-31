@@ -21,8 +21,9 @@
         {
             try
             {
-                var emailService = new EmailService(null, _configuration);
+                var emailService = new EmailService((ILogger<EmailService>)_logger, _configuration);
                 await emailService.SendEmailAsync(msg);
+
                 _logger.LogInformation($"Сообщение для {msg.EmailTo} отправлено в рассылку");
             }
             catch (Exception ex)
