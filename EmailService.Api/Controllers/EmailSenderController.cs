@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
-using System.Net;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace EmailService.Api.Controllers
+namespace EmailServices.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

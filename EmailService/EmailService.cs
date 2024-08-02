@@ -3,7 +3,7 @@ using System.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
-namespace EmailService
+namespace EmailServices
 {
     public class EmailService : IEmailService
     {
@@ -31,11 +31,11 @@ namespace EmailService
                 smtp.Credentials = new NetworkCredential(_smtpName, _smtpPass);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(_message);
-                Console.WriteLine("Письмо отправлено");
+                _logger.LogInformation($"{DateTime.Now} Письмо {message.EmailTo} отправлено успешно");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка отправки письма в SendEmailAsync");
+                _logger.LogError(ex, $"{DateTime.Now} Ошибка отправки письма {message.EmailTo}");
                 throw;
             }
         }

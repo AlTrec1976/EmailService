@@ -3,7 +3,7 @@ using System.Net;
 using System.IO;
 using System.Threading.Tasks;
 using System.Net.Mail;
-using EmailService;
+using EmailServices;
 
 namespace NetConsoleApp
 {
