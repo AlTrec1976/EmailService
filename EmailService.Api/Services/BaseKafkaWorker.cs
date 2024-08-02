@@ -1,11 +1,11 @@
 ﻿using Confluent.Kafka;
 using System.Text.Json;
 
-namespace EmailService.Api.Services
+namespace EmailServices.Api.Services
 {
     public abstract class BaseKafkaWorker<T> : BackgroundService
     {
-        protected abstract string GetTopicName();
+        protected abstract IDictionary<string, string> GetConfiguration();
         protected abstract Task ProccesMessange(T msg);
 
         private readonly ILogger<BaseKafkaWorker<T>> _logger;
@@ -26,21 +26,20 @@ namespace EmailService.Api.Services
             {
                 var config = new ConsumerConfig
                 {
-                    BootstrapServers = "localhost:9092",
-                    GroupId = "email_consumer",
+                    BootstrapServers = GetConfiguration()["KafkaServer"],
+                    GroupId = GetConfiguration()["GroupId"],
                     AutoOffsetReset = AutoOffsetReset.Earliest
                 };
 
                 using (var consumer = new ConsumerBuilder<Ignore, string>(config).Build())
                 {
-                    consumer.Subscribe(GetTopicName());
+                    consumer.Subscribe(GetConfiguration()["Topic"]);
 
                     while (true)
                     {
-                        T? consumeResult = JsonSerializer.Deserialize<T>(consumer.Consume(stoppingToken).Message.Value);
+                        var consumeResult = JsonSerializer.Deserialize<T>(consumer.Consume(stoppingToken).Message.Value);
 
                         await ProccesMessange(consumeResult);
-                        _logger.LogInformation("Сообщение обработано успешно");
                     }
 
                     consumer.Close();
@@ -48,7 +47,7 @@ namespace EmailService.Api.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при обработке сообщения");
+                _logger.LogError($"{DateTime.Now} {ex.Message}");
                 throw;
             }
         }

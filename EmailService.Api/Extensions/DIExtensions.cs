@@ -1,14 +1,14 @@
-﻿using EmailService.Api.Services;
+﻿using EmailServices.Api.Services;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace EmailService.Api.Extensions
+namespace EmailServices.Api.Extensions
 {
     public static class DIExtensions
     {
         public static IServiceCollection ConfigureDependencies(this IServiceCollection services)
         {
-            //services.AddTransient<IEmailService, EmailService>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddHostedService<EmailKafkaWorker>();
+            services.AddHostedService<EmailWorker>();
 
             return services;
         }
