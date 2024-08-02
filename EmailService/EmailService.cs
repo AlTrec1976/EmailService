@@ -8,12 +8,16 @@ namespace EmailServices
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
+        private readonly string _smtpHost;
+        private readonly string _smtpPort;
         private readonly string _smtpName;
         private readonly string _smtpPass;
 
         public EmailService(ILogger<EmailService> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _smtpHost = configuration.GetSection("SmtpConnect:Host").Value;
+            _smtpPort = configuration.GetSection("SmtpConnect:Port").Value;
             _smtpName = configuration.GetSection("SmtpConnect:Name").Value;
             _smtpPass = configuration.GetSection("SmtpConnect:Password").Value;
         }
@@ -27,7 +31,7 @@ namespace EmailServices
                 MailMessage _message = new MailMessage(_from, _to);
                 _message.Subject = "Регистрация прошла успешно";
                 _message.Body = message.MessageBody;
-                SmtpClient smtp = new SmtpClient("mail.altrec.ru", 587);
+                SmtpClient smtp = new SmtpClient(_smtpHost, int.Parse(_smtpPort));
                 smtp.Credentials = new NetworkCredential(_smtpName, _smtpPass);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(_message);
