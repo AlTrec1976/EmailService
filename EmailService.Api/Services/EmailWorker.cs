@@ -1,25 +1,32 @@
-﻿namespace EmailServices.Api.Services
+﻿using EmailService.Entity;
+using Microsoft.Extensions.Options;
+
+namespace EmailServices.Api.Services
 {
     public class EmailWorker : BaseKafkaWorker<EmailServiceMessage>
     {
         private readonly ILogger<EmailWorker> _logger;
+        private readonly IOptions<EmailGroup> _options;
+        private readonly IOptions<SmtpConnect> _smtpoptions;
         private readonly IConfiguration _configuration;
 
-        public EmailWorker(ILogger<EmailWorker> logger, IConfiguration configuration)
+        public EmailWorker(ILogger<EmailWorker> logger, IOptions<EmailGroup> options, IOptions<SmtpConnect> options1, IConfiguration configuration)
         : base(logger)
         {
             _logger = logger;
+            _options = options;
+            _smtpoptions = options1;
             _configuration = configuration;
         }
 
         protected override IDictionary<string, string> GetConfiguration()
         {
+            var options = _configuration.GetSection(nameof(EmailGroup)).Get<EmailGroup>();
             return new Dictionary<string, string>
             {
                 { "KafkaServer", _configuration.GetConnectionString("Kafka") },
-                { "GroupId", _configuration.GetSection("KafkaGroup:EmailGroup:Group").Value },
-                { "Topic", _configuration.GetSection("KafkaGroup:EmailGroup:Topic").Value },
-
+                { "GroupId", _options.Value.Group },
+                { "Topic", _options.Value.Topic },
             };
         }
 
@@ -28,7 +35,9 @@
             try
             {
                 var loggerEmail = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<EmailService>();
-                var emailService = new EmailService(loggerEmail, _configuration);
+                var options = _configuration.GetSection(nameof(SmtpConnect)).Get<SmtpConnect>();
+
+                var emailService = new EmailService(loggerEmail, _smtpoptions);
 
                 _logger.LogInformation($"{DateTime.Now} Сообщение для {msg.EmailTo} отправлено в рассылку");
 

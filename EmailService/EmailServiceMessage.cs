@@ -1,7 +1,4 @@
-﻿using System.Net.Mail;
-using System.Net;
-
-namespace EmailServices;
+﻿namespace EmailServices;
 
 public class EmailServiceMessage
 {
