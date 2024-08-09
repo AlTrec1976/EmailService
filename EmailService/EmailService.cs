@@ -1,25 +1,20 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
+using EmailService.Entity;
+using Microsoft.Extensions.Options;
 
 namespace EmailServices
 {
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
-        private readonly string _smtpHost;
-        private readonly string _smtpPort;
-        private readonly string _smtpName;
-        private readonly string _smtpPass;
+        private readonly IOptions<SmtpConnect> _options;
 
-        public EmailService(ILogger<EmailService> logger, IConfiguration configuration)
+        public EmailService(ILogger<EmailService> logger, IOptions<SmtpConnect> options)
         {
             _logger = logger;
-            _smtpHost = configuration.GetSection("SmtpConnect:Host").Value;
-            _smtpPort = configuration.GetSection("SmtpConnect:Port").Value;
-            _smtpName = configuration.GetSection("SmtpConnect:Name").Value;
-            _smtpPass = configuration.GetSection("SmtpConnect:Password").Value;
+            _options = options;
         }
 
         public async Task SendEmailAsync(EmailServiceMessage message)
@@ -31,8 +26,8 @@ namespace EmailServices
                 MailMessage _message = new MailMessage(_from, _to);
                 _message.Subject = "Регистрация прошла успешно";
                 _message.Body = message.MessageBody;
-                SmtpClient smtp = new SmtpClient(_smtpHost, int.Parse(_smtpPort));
-                smtp.Credentials = new NetworkCredential(_smtpName, _smtpPass);
+                SmtpClient smtp = new SmtpClient(_options.Value.Host, _options.Value.Port);
+                smtp.Credentials = new NetworkCredential(_options.Value.Name, _options.Value.Password);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(_message);
                 _logger.LogInformation($"{DateTime.Now} Письмо {message.EmailTo} отправлено успешно");

@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Extensions.Configuration;
-
-namespace EmailServices
+﻿namespace EmailServices
 {
     public interface IEmailService
     {

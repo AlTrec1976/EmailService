@@ -1,5 +1,4 @@
 ﻿using EmailServices.Api.Services;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace EmailServices.Api.Extensions
 {
