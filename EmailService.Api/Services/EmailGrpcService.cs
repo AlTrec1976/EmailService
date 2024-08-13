@@ -22,7 +22,7 @@ namespace EmailService.Api.Services
             _configuration = configuration;
         }
 
-        public override async Task<Empty> Send(EmailRequest request, ServerCallContext context)
+        public override async Task<EmailReply> Send(EmailRequest request, ServerCallContext context)
         {
             _logger.LogInformation("gRPC is working");
             var msg = new EmailServiceMessage
@@ -39,7 +39,14 @@ namespace EmailService.Api.Services
 
             await emailService.SendEmailAsync(msg);
 
-            return await Task.FromResult<Empty>(null);
+            var reply = new EmailReply
+            {
+                EmailTo = request.EmailTo,
+                EmailFrom = request.EmailFrom,
+                MessageBody = request.MessageBody
+            };
+
+            return reply;
         }
     }
 }

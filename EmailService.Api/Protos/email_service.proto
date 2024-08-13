@@ -8,7 +8,7 @@ package email_service;
 // определение сервиса
 service EmailServiceGrpc {
   // отправка сообщения
-  rpc Send (EmailRequest) returns (google.protobuf.Empty);
+  rpc Send (EmailRequest) returns (EmailReply);
 }
  
 // сообщение от клиента содержит name
@@ -22,5 +22,5 @@ message EmailRequest {
 message EmailReply {
     string EmailTo = 1;
     string EmailFrom = 2;
-    string Message = 3;
+    string MessageBody = 3;
 }
