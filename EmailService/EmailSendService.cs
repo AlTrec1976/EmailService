@@ -6,12 +6,12 @@ using Microsoft.Extensions.Options;
 
 namespace EmailServices
 {
-    public class EmailService : IEmailService
+    public class EmailSendService : IEmailService
     {
-        private readonly ILogger<EmailService> _logger;
+        private readonly ILogger<EmailSendService> _logger;
         private readonly IOptions<SmtpConnect> _options;
 
-        public EmailService(ILogger<EmailService> logger, IOptions<SmtpConnect> options)
+        public EmailSendService(ILogger<EmailSendService> logger, IOptions<SmtpConnect> options)
         {
             _logger = logger;
             _options = options;

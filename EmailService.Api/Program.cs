@@ -1,3 +1,4 @@
+using EmailService.Api.Services;
 using EmailService.Entity;
 using EmailServices.Api.Extensions;
 
@@ -27,6 +28,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapGrpcService<EmailGrpcService>(); 
 app.MapControllers();
 
 app.Run();

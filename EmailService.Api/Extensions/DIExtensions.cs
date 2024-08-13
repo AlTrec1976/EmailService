@@ -1,4 +1,5 @@
-﻿using EmailServices.Api.Services;
+﻿using EmailService.Api.Services;
+using EmailServices.Api.Services;
 
 namespace EmailServices.Api.Extensions
 {
@@ -6,8 +7,12 @@ namespace EmailServices.Api.Extensions
     {
         public static IServiceCollection ConfigureDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddHostedService<EmailWorker>();
+            services.AddScoped<IEmailService, EmailSendService>();
+            services.AddGrpc();
+
+            //services.AddScoped<EmailGrpc>();
+            //services.AddHostedService<EmailGrpc>();
+            //services.AddHostedService<EmailWorker>();
 
             return services;
         }
