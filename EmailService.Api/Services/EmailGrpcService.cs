@@ -1,10 +1,7 @@
 ﻿using EmailService.Entity;
 using EmailServiceGrpcApp;
 using EmailServices;
-using EmailServices.Api.Services;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace EmailService.Api.Services
