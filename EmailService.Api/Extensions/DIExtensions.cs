@@ -10,8 +10,6 @@ namespace EmailServices.Api.Extensions
             services.AddScoped<IEmailService, EmailSendService>();
             services.AddGrpc();
 
-            //services.AddScoped<EmailGrpc>();
-            //services.AddHostedService<EmailGrpc>();
             //services.AddHostedService<EmailWorker>();
 
             return services;
