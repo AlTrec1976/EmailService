@@ -34,10 +34,10 @@ namespace EmailServices.Api.Services
         {
             try
             {
-                var loggerEmail = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<EmailService>();
+                var loggerEmail = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger<EmailSendService>();
                 var options = _configuration.GetSection(nameof(SmtpConnect)).Get<SmtpConnect>();
 
-                var emailService = new EmailService(loggerEmail, _smtpoptions);
+                var emailService = new EmailSendService(loggerEmail, _smtpoptions);
 
                 _logger.LogInformation($"{DateTime.Now} Сообщение для {msg.EmailTo} отправлено в рассылку");
 
